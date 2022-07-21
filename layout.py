@@ -103,7 +103,7 @@ def layout_votacao(i: int, cargos = None) -> sg.Window:
     elif i < len(cargos):
         layout_tela = [
             [sg.Text('Seu voto para')],
-            [sg.Text(cargos[i].nome)],
+            [sg.Text(str(cargos[i]))],
             [sg.Frame('', [
                 [sg.VPush()],
                 [sg.Text('', size=4, key=j, pad=(0,0), justification='center')],
