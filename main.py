@@ -2,6 +2,44 @@ import PySimpleGUI as sg
 from classes import *
 from time import sleep
 
+# nao sei se precisa de um botao pra abrir o csv ou se o filebrowse ja funciona como o botao tbm
+# da pra botar filetype csv eu acho mas fica pra amanha por mim .
+def layout_adm():
+    tam1 = (10, 2)
+    layout = [[
+        sg.Frame(
+            '',
+            [
+                [sg.Push(), sg.Text('Controle da votação', font=('Arial', 14)), sg.Push()],
+                #[sg.FileBrowse(), sg.Button('Carregar lista de candidatos')],
+                [sg.Text('Carregar lista de partidos'), sg.FileBrowse('Selecionar arquivo', size=(20))],
+                [sg.Text('Carregar lista de candidatos'), sg.FileBrowse('Selecionar arquivo', size=(20))],
+                [sg.Button('Iniciar votação', key=('inicio'), size=20)],
+                [sg.Button('Finalizar votação', key=('fim'), size=20, disabled=True)],
+                [sg.HorizontalSeparator(pad=(0,15))],
+                [sg.Push(), sg.Text('Apuração dos votos', font=('Arial', 14)), sg.Push()],
+                [sg.Button('Gerar relatório', key=('relat1'), size=20, disabled=True)],
+                [sg.Text('Número do partido')],
+                [sg.Input(key=('partidoInput'), size=(40)), sg.Button('Gerar relatório', key=('relat2'), size=20, disabled=True)],
+                [sg.Text('Nome do cargo')],
+                [sg.Input(key=('cargoInput'), size=(40)), sg.Button('Gerar relatório', key=('relat3'), size=20, disabled=True)]
+            ],
+            #size=(500, 350),
+            pad=20,
+            border_width=0,
+        )
+    ]]
+    window = sg.Window('Controle da Urna Eletrônica', layout, finalize=True)
+
+    return window
+
+def janela_relatorio():
+    layout = [[sg.Multiline(disabled=True, key=('relat'), pad=20, size=(50, 25))]]
+    window = sg.Window('Relatório dos votos apurados', layout, finalize=True)
+
+    return window
+
+
 def definir_layout(i: int) -> sg.Window:
     cor = ('white', '#0A0A0A')
     tam1 = (7, 2)
@@ -107,12 +145,50 @@ candidato = None
 i = -1
 j = 0
 
-window = definir_layout(i)
+window1, window2, window3 = layout_adm(), None, None
+#window = definir_layout(i)
+#window = layout_adm()
+#window = janela_relatorio()
 while True:
-    event, values = window.read()  # read the window
-    if event == sg.WIN_CLOSED:  # if the X button clicked, just exit
-        break
-    # digitar numero no teclado numerico
+    window, event, values = sg.read_all_windows()
+
+    if event == sg.WIN_CLOSED:
+        window.close()
+        if window == window1:
+            break
+        elif window == window2:
+            window2 = None
+        elif window == window3:
+            windoe3 = None
+    
+    # janela de adm
+    # falta os eventos dos aruqivos n sei se precisa de um btoao a mais fica pra amanha tbm por mim . kk k
+    # possivelmente so ativar inicio depois que escolher arquivo? e dps desativar
+    if event == 'inicio':
+        i = -1
+        j = 0
+        window['fim'].update(disabled=False) # fazer algo pra nao poder apertar no meio do voto?
+        window2 = definir_layout(i)
+    if event == 'fim':
+        i = -5
+        # nao sei se vc quer fazer assim mas sla to enlouqeucendo
+        window['inicio'].update(disabled=True)
+        window['fim'].update(disabled=True)
+        window['relat1'].update(disabled=False)
+        window['relat2'].update(disabled=False)
+        window['relat3'].update(disabled=False)
+    if event == 'relat1':
+        window3 = janela_relatorio()
+        window3['relat'].update('teste')
+    if event == 'relat2':
+        window3 = janela_relatorio()
+        window3['relat'].update('teste partido')
+    if event == 'relat3':
+        window3 = janela_relatorio()
+        window3['relat'].update('teste cargo')
+
+
+    # janela de votacao
     if event in '1234567890':
         # CPF
         if i == -1:
@@ -133,9 +209,7 @@ while True:
             if j == UrnaEletronica.Cargos[i].tamCod:
                 candidato = urna.buscar_candidato(numero, UrnaEletronica.Cargos[i])
                 mostrar_candidato(candidato)
-    
-    # apaga os numeros digitados
-    elif event == 'CORRIGE': 
+    if event == 'CORRIGE': 
         numero = ''
         # CPF
         if i == -1:
@@ -149,10 +223,8 @@ while True:
             mostrar_candidato()
             candidato = None
         j = 0
-
-    # nao insere voto na urna / insere voto invalido; passa para proximo cargo
-    elif event == 'BRANCO':
-        if i != -1:
+    if event == 'BRANCO':
+        if i > -1 and i < 5:
             window.close()
             numero = ''
             candidato = None
@@ -162,9 +234,7 @@ while True:
             if i == 7:
                 urna.relatorio_votos()
                 i = -1
-
-    # tenta inserir voto na urna; passa para proximo cargo
-    elif event == 'CONFIRMA':
+    if event == 'CONFIRMA':
         # CPF
         if i == -1:
             if j == 11 and validar_cpf(numero) == True:
@@ -187,4 +257,3 @@ while True:
                 sleep(10)
                 window.close()
                 window = definir_layout(i)
-
