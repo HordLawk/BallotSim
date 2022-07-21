@@ -1,6 +1,7 @@
 import PySimpleGUI as sg
-from classes import *
+from urna import UrnaEletronica
 from time import sleep
+from candidato import Candidato
 
 def definir_layout(i: int) -> sg.Window:
     cor = ('white', '#0A0A0A')
@@ -50,10 +51,10 @@ def definir_layout(i: int) -> sg.Window:
     # votacao
     elif i <= 4:
         layout_esq = [
-            [sg.Text(UrnaEletronica.Cargos[i].nome)],
+            [sg.Text(urna.cargos[i].nome)],
             [sg.Frame('', [[sg.VPush()],
                 [sg.Text('', size=(4), key=(j), pad=(0,0), justification='center')],
-                [sg.VPush()]]) for j in range(UrnaEletronica.Cargos[i].tamCod)],
+                [sg.VPush()]]) for j in range(urna.cargos[i].tamCod)],
             [sg.Text('Nome:', key=('nomeLabel'), visible=False), sg.Text('testando', key=('nome'), visible=False)],
             [
                 sg.Text('Partido:', key=('partidoLabel'), visible=False),
@@ -70,7 +71,8 @@ def definir_layout(i: int) -> sg.Window:
 
     return window
 
-def mostrar_candidato(candidato: Candidato = None) -> None:
+def mostrar_candidato(numero: str, cargo_codigo: int) -> None:
+    candidato = urna.buscar_candidato(numero, cargo_codigo)
     if candidato == None:
         window['nomeLabel'].update(visible=False)
         window['partidoLabel'].update(visible=False)
@@ -124,15 +126,14 @@ while True:
                     window['erroCPF'].update(visible=True)
         # VOTO
         elif i < 5:
-            if j >= UrnaEletronica.Cargos[i].tamCod:
+            if j >= urna.cargos[i].tamCod:
                 continue
             
             numero += event
             window[j].update(event)
             j += 1
-            if j == UrnaEletronica.Cargos[i].tamCod:
-                candidato = urna.buscar_candidato(numero, UrnaEletronica.Cargos[i])
-                mostrar_candidato(candidato)
+            if j == urna.cargos[i].tamCod:
+                mostrar_candidato(numero, i)
     
     # apaga os numeros digitados
     elif event == 'CORRIGE': 
@@ -146,7 +147,7 @@ while True:
         elif i < 5:
             for k in range(j):
                 window[k].update('')
-            mostrar_candidato()
+            mostrar_candidato(None, i)
             candidato = None
         j = 0
 
@@ -174,8 +175,8 @@ while True:
                 numero = ''
                 window = definir_layout(i)
         # VOTO
-        elif (i < 5) and (j == UrnaEletronica.Cargos[i].tamCod):
-            urna.inserir_voto(numero, UrnaEletronica.Cargos[i].nome)
+        elif (i < 5) and (j == urna.cargos[i].tamCod):
+            urna.inserir_voto(numero, i)
             i += 1
             j = 0
             window.close()
