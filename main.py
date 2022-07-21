@@ -1,6 +1,7 @@
 import PySimpleGUI as sg
-from classes import *
+from urna import UrnaEletronica
 from time import sleep
+from candidato import Candidato
 
 # nao sei se precisa de um botao pra abrir o csv ou se o filebrowse ja funciona como o botao tbm
 # da pra botar filetype csv eu acho mas fica pra amanha por mim .
@@ -80,18 +81,21 @@ def definir_layout(i: int) -> sg.Window:
     layout_esq = []
     # CPF
     if i == -1:
-        layout_esq = [[sg.Text('Insira seu CPF:')], 
+        layout_esq = [
+            [sg.Text('Insira seu CPF:')], 
             [sg.Frame('', [[sg.VPush()],
                 [sg.Text('', size=(2), key=('CPF' + str(j)), pad=(0,0), justification='center')],
                 [sg.VPush()]]) for j in range(11)],
-            [sg.Text('CPF inválido', key=('erroCPF'), visible=False)]]
+            [sg.Text('CPF inválido', key=('erroCPF'), visible=False)],
+            [sg.Text('CPF já utilizado', key=('CPF_repetido'), visible=False)]
+        ]
     # votacao
     elif i <= 4:
         layout_esq = [
-            [sg.Text(UrnaEletronica.Cargos[i].nome)],
+            [sg.Text(urna.cargos[i].nome)],
             [sg.Frame('', [[sg.VPush()],
                 [sg.Text('', size=(4), key=(j), pad=(0,0), justification='center')],
-                [sg.VPush()]]) for j in range(UrnaEletronica.Cargos[i].tamCod)],
+                [sg.VPush()]]) for j in range(urna.cargos[i].tamCod)],
             [sg.Text('Nome:', key=('nomeLabel'), visible=False), sg.Text('testando', key=('nome'), visible=False)],
             [
                 sg.Text('Partido:', key=('partidoLabel'), visible=False),
@@ -108,7 +112,8 @@ def definir_layout(i: int) -> sg.Window:
 
     return window
 
-def mostrar_candidato(candidato: Candidato = None) -> None:
+def mostrar_candidato(numero: str, cargo_codigo: int) -> None:
+    candidato = urna.buscar_candidato(numero, cargo_codigo)
     if candidato == None:
         window['nomeLabel'].update(visible=False)
         window['partidoLabel'].update(visible=False)
@@ -124,15 +129,11 @@ def validar_cpf(cpf: str) -> bool:
     if (len(cpf) < 11) or (cpf == (cpf[0] * 11)):
         return False
     digitos = [int(e) for e in cpf]
-    soma1 = 0
-    for i,e in enumerate(digitos[:9]):
-        soma1 += e * (10 - i)
-    if (((soma1 * 10) % 11) % 10) != digitos[9]:
-        return False
-    soma2 = 0
-    for i,e in enumerate(digitos[:10]):
-        soma2 += e * (11 - i)
-    return (((soma2 * 10) % 11) % 10) == digitos[10]
+    return (
+        ((((sum([(e * (10 - i)) for i,e in enumerate(digitos[:9])]) * 10) % 11) % 10) == digitos[9])
+        and
+        ((((sum([(e * (11 - i)) for i,e in enumerate(digitos[:10])]) * 10) % 11) % 10) == digitos[10])
+    )
 
 sg.theme('GrayGrayGray')
 sg.set_options(font=("Arial", 12))
@@ -200,27 +201,29 @@ while True:
                     window['erroCPF'].update(visible=True)
         # VOTO
         elif i < 5:
-            if j >= UrnaEletronica.Cargos[i].tamCod:
+            if j >= urna.cargos[i].tamCod:
                 continue
             
             numero += event
             window[j].update(event)
             j += 1
-            if j == UrnaEletronica.Cargos[i].tamCod:
-                candidato = urna.buscar_candidato(numero, UrnaEletronica.Cargos[i])
-                mostrar_candidato(candidato)
-    if event == 'CORRIGE': 
+            if j == urna.cargos[i].tamCod:
+                mostrar_candidato(numero, i)
+    
+    # apaga os numeros digitados
+    elif event == 'CORRIGE': 
         numero = ''
         # CPF
         if i == -1:
             window['erroCPF'].update(visible=False)
+            window['CPF_repetido'].update(visible=False)
             for k in range(j):
                 window['CPF' + str(k)].update('')
         # VOTO
         elif i < 5:
             for k in range(j):
                 window[k].update('')
-            mostrar_candidato()
+            mostrar_candidato(None, i)
             candidato = None
         j = 0
     if event == 'BRANCO':
@@ -237,15 +240,19 @@ while True:
     if event == 'CONFIRMA':
         # CPF
         if i == -1:
-            if j == 11 and validar_cpf(numero) == True:
-                i += 1
-                j = 0
-                window.close()
-                numero = ''
-                window = definir_layout(i)
+            if (j != 11) or not validar_cpf(numero):
+                continue
+            if not urna.novo_cpf(numero):
+                window['CPF_repetido'].update(visible=True)
+                continue
+            i += 1
+            j = 0
+            window.close()
+            numero = ''
+            window = definir_layout(i)
         # VOTO
-        elif (i < 5) and (j == UrnaEletronica.Cargos[i].tamCod):
-            urna.inserir_voto(numero, UrnaEletronica.Cargos[i].nome)
+        elif (i < 5) and (j == urna.cargos[i].tamCod):
+            urna.inserir_voto(numero, i)
             i += 1
             j = 0
             window.close()
