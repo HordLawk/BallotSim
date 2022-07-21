@@ -1,6 +1,7 @@
 import PySimpleGUI as sg
-from urna import UrnaEletronica
 from time import sleep
+
+from urna import UrnaEletronica
 
 # nao sei se precisa de um botao pra abrir o csv ou se o filebrowse ja funciona como o botao tbm
 # da pra botar filetype csv eu acho mas fica pra amanha por mim .

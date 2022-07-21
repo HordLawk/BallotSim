@@ -1,8 +1,9 @@
 import csv
+import numpy
+
 from candidato import Candidato
 from cargo import Cargo
 from partido import Partido
-import numpy
 
 class UrnaEletronica:
     def __init__(self) -> None:
@@ -11,13 +12,15 @@ class UrnaEletronica:
             Cargo('DEPUTADO FEDERAL', 4),
             Cargo('DEPUTADO ESTADUAL', 5),
             Cargo('SENADOR', 3),
-            Cargo('GOVERNADDOR', 2),
+            Cargo('GOVERNADOR', 2),
             Cargo('PRESIDENTE', 2),
         ]
         self.cpfs: set[str] = set()
 
     def inicializar_candidatos(self) -> None:
-        self.partidos = [Partido(linha[0], linha[1], linha[2]) for linha in csv.reader(open('partidos.csv'))]
+        for linha in csv.reader(open('partidos.csv')):
+            if len(linha) > 2:
+                self.partidos.append(Partido(*linha[:3]))
         for linha in csv.reader(open('candidatos.csv')):
             if len(linha) < 3:
                 continue
@@ -28,8 +31,8 @@ class UrnaEletronica:
             if cargo_codigo > len(self.cargos):
                 continue
             cargo = self.cargos[cargo_codigo]
-            partido.inserir_candidato(linha[0], linha[1])
-            cargo.inserir_candidato(linha[0], linha[1], partido)
+            partido.inserir_candidato(*linha[:2])
+            cargo.inserir_candidato(*linha[:2], partido)
 
     def inserir_voto(self, numero: str, cargo_codigo: int) -> None:
         self.cargos[cargo_codigo].inserir_voto(numero)
@@ -62,7 +65,7 @@ class UrnaEletronica:
                             list(
                                 numpy.concatenate(
                                     [
-                                        [f'{voto} ({candidato.numero})\n' for voto in candidato.votos]
+                                        [f'{voto} ({candidato.numero}) ({cargo.nome})\n' for voto in candidato.votos]
                                         for candidato
                                         in cargo.candidatos
                                     ]
