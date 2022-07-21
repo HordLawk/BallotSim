@@ -13,6 +13,7 @@ class UrnaEletronica:
             Cargo('GOVERNADDOR', 2),
             Cargo('PRESIDENTE', 2),
         ]
+        self.cpfs: set[str] = set()
 
     def inicializar_candidatos(self) -> None:
         self.partidos = [Partido(linha[0], linha[1], linha[2]) for linha in csv.reader(open('partidos.csv'))]
@@ -31,6 +32,12 @@ class UrnaEletronica:
 
     def inserir_voto(self, numero: str, cargo_codigo: int) -> None:
         self.cargos[cargo_codigo].inserir_voto(numero)
+    
+    def novo_cpf(self, cpf: str) -> bool:
+        if cpf in self.cpfs:
+            return False
+        self.cpfs.add(cpf)
+        return True
     
     def buscar_partido(self, numero: str) -> (Partido | None):
         for p in self.partidos:

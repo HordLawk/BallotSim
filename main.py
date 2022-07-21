@@ -43,11 +43,14 @@ def definir_layout(i: int) -> sg.Window:
     layout_esq = []
     # CPF
     if i == -1:
-        layout_esq = [[sg.Text('Insira seu CPF:')], 
+        layout_esq = [
+            [sg.Text('Insira seu CPF:')], 
             [sg.Frame('', [[sg.VPush()],
                 [sg.Text('', size=(2), key=('CPF' + str(j)), pad=(0,0), justification='center')],
                 [sg.VPush()]]) for j in range(11)],
-            [sg.Text('CPF inválido', key=('erroCPF'), visible=False)]]
+            [sg.Text('CPF inválido', key=('erroCPF'), visible=False)],
+            [sg.Text('CPF já utilizado', key=('CPF_repetido'), visible=False)]
+        ]
     # votacao
     elif i <= 4:
         layout_esq = [
@@ -141,6 +144,7 @@ while True:
         # CPF
         if i == -1:
             window['erroCPF'].update(visible=False)
+            window['CPF_repetido'].update(visible=False)
             for k in range(j):
                 window['CPF' + str(k)].update('')
         # VOTO
@@ -168,12 +172,16 @@ while True:
     elif event == 'CONFIRMA':
         # CPF
         if i == -1:
-            if j == 11 and validar_cpf(numero) == True:
-                i += 1
-                j = 0
-                window.close()
-                numero = ''
-                window = definir_layout(i)
+            if (j != 11) or not validar_cpf(numero):
+                continue
+            if not urna.novo_cpf(numero):
+                window['CPF_repetido'].update(visible=True)
+                continue
+            i += 1
+            j = 0
+            window.close()
+            numero = ''
+            window = definir_layout(i)
         # VOTO
         elif (i < 5) and (j == urna.cargos[i].tamCod):
             urna.inserir_voto(numero, i)
