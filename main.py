@@ -91,15 +91,11 @@ def validar_cpf(cpf: str) -> bool:
     if (len(cpf) < 11) or (cpf == (cpf[0] * 11)):
         return False
     digitos = [int(e) for e in cpf]
-    soma1 = 0
-    for i,e in enumerate(digitos[:9]):
-        soma1 += e * (10 - i)
-    if (((soma1 * 10) % 11) % 10) != digitos[9]:
-        return False
-    soma2 = 0
-    for i,e in enumerate(digitos[:10]):
-        soma2 += e * (11 - i)
-    return (((soma2 * 10) % 11) % 10) == digitos[10]
+    return (
+        ((((sum([(e * (10 - i)) for i,e in enumerate(digitos[:9])]) * 10) % 11) % 10) == digitos[9])
+        and
+        ((((sum([(e * (11 - i)) for i,e in enumerate(digitos[:10])]) * 10) % 11) % 10) == digitos[10])
+    )
 
 sg.theme('GrayGrayGray')
 sg.set_options(font=("Arial", 12))
