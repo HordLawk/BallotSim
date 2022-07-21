@@ -4,7 +4,7 @@ from time import sleep
 
 # nao sei se precisa de um botao pra abrir o csv ou se o filebrowse ja funciona como o botao tbm
 # da pra botar filetype csv eu acho mas fica pra amanha por mim .
-def layout_adm():
+def layout_adm() -> sg.Window:
     tam1 = (10, 2)
     layout = [[
         sg.Frame(
@@ -33,7 +33,7 @@ def layout_adm():
 
     return window
 
-def janela_relatorio():
+def janela_relatorio() -> sg.Window:
     layout = [[sg.Multiline(disabled=True, key=('relat'), pad=20, size=(50, 25))]]
     window = sg.Window('Relatório dos votos apurados', layout, finalize=True)
 
@@ -233,7 +233,12 @@ while True:
             i += 1
             j = 0
             window = definir_layout(i)
-            if i == 7:
+            if i == 5:
+                i = -1
+                sleep(5)
+                window.close()
+                window = definir_layout(i)
+            elif i == 7:
                 urna.relatorio_votos()
                 i = -1
     if event == 'CONFIRMA':
@@ -260,6 +265,6 @@ while True:
             window = definir_layout(i)
             if i == 5:
                 i = -1
-                sleep(10)
+                sleep(5)
                 window.close()
                 window = definir_layout(i)
