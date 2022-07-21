@@ -11,7 +11,7 @@ class UrnaEletronica:
             Cargo('DEPUTADO FEDERAL', 4),
             Cargo('DEPUTADO ESTADUAL', 5),
             Cargo('SENADOR', 3),
-            Cargo('GOVERNADDOR', 2),
+            Cargo('GOVERNADOR', 2),
             Cargo('PRESIDENTE', 2),
         ]
         self.cpfs: set[str] = set()
