@@ -1,9 +1,8 @@
 import csv
-import numpy
-
 from candidato import Candidato
 from cargo import Cargo
 from partido import Partido
+import numpy
 
 class UrnaEletronica:
     def __init__(self) -> None:
@@ -18,9 +17,7 @@ class UrnaEletronica:
         self.cpfs: set[str] = set()
 
     def inicializar_candidatos(self) -> None:
-        for linha in csv.reader(open('partidos.csv')):
-            if len(linha) > 2:
-                self.partidos.append(Partido(*linha[:3]))
+        self.partidos = [Partido(linha[0], linha[1], linha[2]) for linha in csv.reader(open('partidos.csv'))]
         for linha in csv.reader(open('candidatos.csv')):
             if len(linha) < 3:
                 continue
