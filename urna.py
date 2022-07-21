@@ -31,8 +31,9 @@ class UrnaEletronica:
             if cargo_codigo > len(self.cargos):
                 continue
             cargo = self.cargos[cargo_codigo]
-            partido.inserir_candidato(*linha[:2])
-            cargo.inserir_candidato(*linha[:2], partido)
+            candidato = Candidato(*linha[:2], partido, cargo)
+            partido.inserir_candidato(candidato)
+            cargo.inserir_candidato(candidato)
 
     def inserir_voto(self, numero: str, cargo_codigo: int) -> None:
         self.cargos[cargo_codigo].inserir_voto(numero)
@@ -65,7 +66,7 @@ class UrnaEletronica:
                             list(
                                 numpy.concatenate(
                                     [
-                                        [f'{voto} ({candidato.numero}) ({cargo.nome})\n' for voto in candidato.votos]
+                                        [f'{voto} ({candidato.numero}) ({cargo})\n' for voto in candidato.votos]
                                         for candidato
                                         in cargo.candidatos
                                     ]
@@ -78,21 +79,9 @@ class UrnaEletronica:
             ) +
             f'Votos inválidos: {votos_invalidos} voto(s)'
         )
-
-    # def relatorio_cargo(self, cargo: (Cargo | None) = None) -> None:
-    #     for c in UrnaEletronica.Cargos:
-    #         if cargo == None or cargo == c:
-    #             print(c)
-    #             for cand in self.candidatos:
-    #                 if cand.cargo == c:
-    #                     print(f'{cand} ({cand.partido}) - {cand.votos} voto(s)')
-    #             print('')
-
-    # def relatorio_partido(self, partido: (Partido | None) = None, sigla: (str | None) = None) -> None:
-    #     for p in self.partidos: 
-    #         if (partido == None and sigla == None) or (partido == p) or (sigla == p.sigla):
-    #             print(p)
-    #             for cand in self.candidatos:
-    #                 if cand.partido == p:
-    #                     print(f'{cand} ({cand.cargo}) - {cand.votos} voto(s)')
-    #             print('')
+    
+    def relatorio_cargos(self) -> str:
+        return '\n'.join([cargo.relatorio() for cargo in self.cargos])
+    
+    def relatorio_partidos(self) -> str:
+        return '\n'.join([partido.relatorio() for partido in self.partidos])

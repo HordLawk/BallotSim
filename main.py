@@ -92,7 +92,7 @@ def definir_layout(i: int) -> sg.Window:
     # votacao
     elif i <= 4:
         layout_esq = [
-            [sg.Text(urna.cargos[i].nome)],
+            [sg.Text(str(urna.cargos[i]))],
             [sg.Frame('', [[sg.VPush()],
                 [sg.Text('', size=(4), key=(j), pad=(0,0), justification='center')],
                 [sg.VPush()]]) for j in range(urna.cargos[i].tamCod)],
@@ -122,7 +122,7 @@ def mostrar_candidato(numero: str, cargo_codigo: int) -> None:
     else:
         window['nomeLabel'].update(visible=True)
         window['partidoLabel'].update(visible=True)
-        window['nome'].update(candidato.nome, visible=True)
+        window['nome'].update(str(candidato), visible=True)
         window['partido'].update(str(candidato.partido), visible=True)
 
 def validar_cpf(cpf: str) -> bool:
@@ -183,14 +183,14 @@ while True:
         window3['relat'].update(urna.relatorio_votos())
     if event == 'relat2':
         window3 = janela_relatorio()
-        window3['relat'].update('teste partido')
+        window3['relat'].update(urna.relatorio_partidos())
     if event == 'relat3':
         window3 = janela_relatorio()
-        window3['relat'].update('teste cargo')
+        window3['relat'].update(urna.relatorio_cargos())
 
 
     # janela de votacao
-    if event in '1234567890':
+    if event and (event in '1234567890'):
         # CPF
         if i == -1:
             if j < 11:
