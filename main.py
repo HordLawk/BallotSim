@@ -1,7 +1,6 @@
 import PySimpleGUI as sg
 from urna import UrnaEletronica
 from time import sleep
-from candidato import Candidato
 
 # nao sei se precisa de um botao pra abrir o csv ou se o filebrowse ja funciona como o botao tbm
 # da pra botar filetype csv eu acho mas fica pra amanha por mim .
@@ -180,7 +179,7 @@ while True:
         window['relat3'].update(disabled=False)
     if event == 'relat1':
         window3 = janela_relatorio()
-        window3['relat'].update('teste')
+        window3['relat'].update(urna.relatorio_votos())
     if event == 'relat2':
         window3 = janela_relatorio()
         window3['relat'].update('teste partido')
