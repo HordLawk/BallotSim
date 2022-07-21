@@ -5,4 +5,4 @@ class Voto:
         self.data = dt.datetime.now()
 
     def __str__(self) -> str:
-        return f'{self.data} {self.numero}'
+        return f'{self.data}'

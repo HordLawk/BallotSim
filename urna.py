@@ -2,6 +2,7 @@ import csv
 from candidato import Candidato
 from cargo import Cargo
 from partido import Partido
+import numpy
 
 class UrnaEletronica:
     def __init__(self) -> None:
@@ -48,12 +49,32 @@ class UrnaEletronica:
     def buscar_candidato(self, numero: str, cargo_codigo: int) -> (Candidato | None):
         return self.cargos[cargo_codigo].buscar_candidato(numero)
 
-    # def relatorio_votos(self) -> None:
-    #     print(f'TOTAL DE VOTOS: {len(self.votos) + self.votosInvalidos} voto(s)')
-    #     print(f'Votos válidos: {len(self.votos)} voto(s)')
-    #     for v in self.votos:
-    #         print(v)
-    #     print(f'Votos inválidos: {self.votosInvalidos} voto(s)')
+    def relatorio_votos(self) -> None:
+        votos_validos = sum([sum([len(candidato.votos) for candidato in cargo.candidatos]) for cargo in self.cargos])
+        votos_invalidos = sum([cargo.votosInvalidos for cargo in self.cargos])
+        return (
+            f'TOTAL DE VOTOS: {votos_validos + votos_invalidos} voto(s)\n'
+            f'Votos válidos: {votos_validos} voto(s)\n' +
+            ''.join(
+                list(
+                    numpy.concatenate(
+                        [
+                            list(
+                                numpy.concatenate(
+                                    [
+                                        [f'{voto} ({candidato.numero})\n' for voto in candidato.votos]
+                                        for candidato
+                                        in cargo.candidatos
+                                    ]
+                                ).flat
+                            )
+                            for cargo
+                            in self.cargos]
+                    ).flat
+                )
+            ) +
+            f'Votos inválidos: {votos_invalidos} voto(s)'
+        )
 
     # def relatorio_cargo(self, cargo: (Cargo | None) = None) -> None:
     #     for c in UrnaEletronica.Cargos:
