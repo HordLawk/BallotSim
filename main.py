@@ -38,7 +38,7 @@ inicio = False
 # window1: controle; window2: votacao; window3: relatorio dos votos
 window1, window2, window3 = layout_controle(), None, None
 
-arquivo1, arquivo2 = '', ''
+partidos_csv, cargos_csv, candidatos_csv = '', '', ''
 
 while True:
     window, event, values = sg.read_all_windows()
@@ -66,8 +66,7 @@ while True:
         case 'inicio':
             if not inicio:
                 inicio = True
-                urna = UrnaEletronica()
-                urna.inicializar_candidatos()
+                urna = UrnaEletronica(partidos_csv, cargos_csv, candidatos_csv)
 
             window1['inicio'].update(disabled=True)
             window1['fim'].update(disabled=True)
@@ -79,6 +78,7 @@ while True:
         case 'fim':
             window1['fbPartido'].update(disabled=True)
             window1['fbCandidato'].update(disabled=True)
+            window1['fbCargo'].update(disabled=True)
             window1['inicio'].update(disabled=True)
             window1['fim'].update(disabled=True)
             window1['relat1'].update(disabled=False)
@@ -112,14 +112,20 @@ while True:
 
         # arquivo com lista de partidos carregado
         case 'csvPartido':
-            arquivo1 = values['csvPartido']
-            if arquivo1 and arquivo2:
+            partidos_csv = values['csvPartido']
+            if partidos_csv and candidatos_csv and cargos_csv:
+                window1['inicio'].update(disabled=False)
+                
+        # arquivo com lista de candidatos carregado
+        case 'csvCargo':
+            cargos_csv = values['csvCargo']
+            if partidos_csv and candidatos_csv and cargos_csv:
                 window1['inicio'].update(disabled=False)
                 
         # arquivo com lista de candidatos carregado
         case 'csvCandidato':
-            arquivo2 = values['csvCandidato']
-            if arquivo1 and arquivo2:
+            candidatos_csv = values['csvCandidato']
+            if partidos_csv and candidatos_csv and cargos_csv:
                 window1['inicio'].update(disabled=False)
 
         # janela de votacao

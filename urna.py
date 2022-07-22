@@ -5,20 +5,21 @@ from partido import Partido
 import numpy
 
 class UrnaEletronica:
-    def __init__(self) -> None:
+    def __init__(self, partidos_csv: str, cargos_csv: str, candidatos_csv: str) -> None:
         self.partidos: list[Partido] = []
-        self.cargos = [
-            Cargo('DEPUTADO FEDERAL', 4),
-            Cargo('DEPUTADO ESTADUAL', 5),
-            Cargo('SENADOR', 3),
-            Cargo('GOVERNADOR', 2),
-            Cargo('PRESIDENTE', 2),
-        ]
+        self.cargos: list[Cargo] = []
         self.cpfs: set[str] = set()
-
-    def inicializar_candidatos(self) -> None:
-        self.partidos = [Partido(linha[0], linha[1], linha[2]) for linha in csv.reader(open('partidos.csv'))]
-        for linha in csv.reader(open('candidatos.csv')):
+        for linha in csv.reader(open(partidos_csv)):
+            if len(linha) > 2:
+                self.partidos.append(Partido(*linha[:3]))
+        for linha in csv.reader(open(cargos_csv)):
+            if len(linha) < 2:
+                continue
+            try:
+                self.cargos.append(Cargo(linha[0], int(linha[1])))
+            except ValueError:
+                continue
+        for linha in csv.reader(open(candidatos_csv)):
             if len(linha) < 3:
                 continue
             partido = self.buscar_partido(linha[1])
