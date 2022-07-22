@@ -4,6 +4,7 @@ from cargo import Cargo
 from partido import Partido
 import numpy
 
+# classe para representar uma urna eletronica
 class UrnaEletronica:
     def __init__(self) -> None:
         self.partidos: list[Partido] = []
@@ -31,25 +32,32 @@ class UrnaEletronica:
             candidato = Candidato(*linha[:2], partido, cargo)
             partido.inserir_candidato(candidato)
             cargo.inserir_candidato(candidato)
-
+ 
+    # chama a funcao para adicionar um voto ao candidato de um cargo especifico com o numero selecionado
     def inserir_voto(self, numero: str, cargo_codigo: int) -> None:
         self.cargos[cargo_codigo].inserir_voto(numero)
-    
+
+    # verifica se o CPF informado ja foi utilizado para votacao; retorna True ou False   
     def novo_cpf(self, cpf: str) -> bool:
         if cpf in self.cpfs:
             return False
         self.cpfs.add(cpf)
         return True
     
+    # busca um partido na lista de partidos pelo seu numero associado
+    # retorna objeto da classe partido (se encontrar) ou None (se nao encontrar)
     def buscar_partido(self, numero: str) -> (Partido | None):
         for p in self.partidos:
             if p.numero == numero[:2]:
                 return p
         return None
     
+    # busca um candidato na lista de candidatos de um cargo especifico pelo seu numero associado
+    # retorna objeto da classe candidato (se encontrar) ou None (se nao encontrar)
     def buscar_candidato(self, numero: str, cargo_codigo: int) -> (Candidato | None):
         return self.cargos[cargo_codigo].buscar_candidato(numero)
 
+    # retorna string com relatorio de todos os votos inseridos na urna eletronica
     def relatorio_votos(self) -> None:
         votos_validos = sum([sum([len(candidato.votos) for candidato in cargo.candidatos]) for cargo in self.cargos])
         votos_invalidos = sum([cargo.votosInvalidos for cargo in self.cargos])
@@ -77,8 +85,10 @@ class UrnaEletronica:
             f'Votos inválidos: {votos_invalidos} voto(s)'
         )
     
+    # retorna string com relatorio dos votos organizados por cargo
     def relatorio_cargos(self) -> str:
         return '\n'.join([cargo.relatorio() for cargo in self.cargos])
     
+    # retorna string com relatorio dos votos organizados por partido
     def relatorio_partidos(self) -> str:
         return '\n'.join([partido.relatorio() for partido in self.partidos])

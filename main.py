@@ -13,7 +13,7 @@ def exibir_info(candidato: Candidato) -> None:
         window['nome'].update(str(candidato.nome))
         window['partido'].update(str(candidato.partido))
 
-#
+# verifica se CPF informado e valido; retorna True ou False
 def validar_cpf(cpf: str) -> bool:
     if (len(cpf) < 11) or (cpf == (cpf[0] * 11)):
         return False
@@ -24,22 +24,22 @@ def validar_cpf(cpf: str) -> bool:
         ((((sum([(e * (11 - i)) for i,e in enumerate(digitos[:10])]) * 10) % 11) % 10) == digitos[10])
     )
 
+# configuracoes do design das janelas
 sg.theme('GrayGrayGray')
 sg.set_options(font=("Arial", 12))
 
+# configuracoes iniciais da urna eletronica
 numero = ''
 urna = None
-
-i = 0
-j = 0
+i, j = 0, 0
 inicio = False
+arquivo1, arquivo2 = '', ''
 
 # janelas da aplicacao
 # window1: controle; window2: votacao; window3: relatorio dos votos
 window1, window2, window3 = layout_controle(), None, None
 
-arquivo1, arquivo2 = '', ''
-
+# loop principal da aplicacao
 while True:
     window, event, values = sg.read_all_windows()
 
