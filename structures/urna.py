@@ -13,9 +13,9 @@ class UrnaEletronica:
     def __init__(self, partidos_csv: str, cargos_csv: str, candidatos_csv: str) -> None:
         self.cargos: list[Cargo] = []
         self.cpfs: set[str] = set()
-        self.cargos = [Cargo(linha[0], int(linha[1])) for linha in csv.reader(open(cargos_csv))]
-        self.partidos = [Partido(*linha[:3]) for linha in csv.reader(open(partidos_csv)) if len(linha) > 2]
-        for linha in csv.reader(open(candidatos_csv)):
+        self.cargos = [Cargo(linha[0], int(linha[1])) for linha in csv.reader(open(cargos_csv, encoding='utf-8'))]
+        self.partidos = [Partido(*linha[:3]) for linha in csv.reader(open(partidos_csv, encoding='utf-8')) if len(linha) > 2]
+        for linha in csv.reader(open(candidatos_csv, encoding='utf-8')):
             if len(linha) < 3:
                 continue
 
