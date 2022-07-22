@@ -76,7 +76,7 @@ class UrnaEletronica:
         votos_validos = sum([sum([len(candidato.votos) for candidato in cargo.candidatos]) for cargo in self.cargos])
         votos_invalidos = sum([cargo.votosInvalidos for cargo in self.cargos])
         return (
-            f'TOTAL DE VOTOS: {votos_validos + votos_invalidos} voto(s)\n'
+            f'TOTAL DE VOTOS: {votos_validos + votos_invalidos} voto(s)\n\n'
             f'Votos válidos: {votos_validos} voto(s)\n' +
             ''.join(
                 list(
@@ -85,7 +85,7 @@ class UrnaEletronica:
                             list(
                                 numpy.concatenate(
                                     [
-                                        [f'{voto} ({candidato.numero}) ({cargo})\n' for voto in candidato.votos]
+                                        [f'- {voto} - {candidato.numero} ({cargo})\n' for voto in candidato.votos]
                                         for candidato
                                         in cargo.candidatos
                                     ]
@@ -96,7 +96,7 @@ class UrnaEletronica:
                     ).flat
                 )
             ) +
-            f'Votos inválidos: {votos_invalidos} voto(s)'
+            f'\nVotos inválidos: {votos_invalidos} voto(s)'
         )
     
     # retorna string com relatorio dos votos organizados por cargo

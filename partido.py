@@ -17,8 +17,9 @@ class Partido:
     # retorna string com relatorio dos votos relativos aos candidatos do partido
     def relatorio(self) -> str:
         return (
-            f'{self}\n' +
-            ''.join([f'{candidato} ({candidato.cargo}) - {len(candidato.votos)} voto(s)\n' for candidato in self.candidatos])
+            f'{self}\n\n' +
+            ''.join([f'- {candidato} ({candidato.cargo}) - {len(candidato.votos)} voto(s)\n' for candidato in self.candidatos]) +
+            '\n' + '-' * 85 + '\n'
         )
     
     # retorna representacao do partido em string
