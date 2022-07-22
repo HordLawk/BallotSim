@@ -1,5 +1,4 @@
 import csv
-import numpy
 
 from candidato import Candidato
 from cargo import Cargo
@@ -79,24 +78,21 @@ class UrnaEletronica:
             f'TOTAL DE VOTOS: {votos_validos + votos_invalidos} voto(s)\n\n'
             f'Votos válidos: {votos_validos} voto(s)\n' +
             ''.join(
-                list(
-                    numpy.concatenate(
+                [
+                    ''.join(
                         [
-                            list(
-                                numpy.concatenate(
-                                    [
-                                        [f'- {voto} - {candidato.numero} ({cargo})\n' for voto in candidato.votos]
-                                        for candidato
-                                        in cargo.candidatos
-                                    ]
-                                ).flat
-                            )
-                            for cargo
-                            in self.cargos]
-                    ).flat
-                )
-            ) +
-            f'\nVotos inválidos: {votos_invalidos} voto(s)'
+                            ''.join([f'- {voto} - {candidato.numero} ({cargo})\n' for voto in candidato.votos])
+                            for candidato
+                            in cargo.candidatos
+                            if len(candidato.votos)
+                        ]
+                    )
+                    for cargo
+                    in self.cargos
+                    if len(cargo.candidatos)
+                ]
+            ) + '\n'
+            f'Votos inválidos: {votos_invalidos} voto(s)'
         )
     
     # retorna string com relatorio dos votos organizados por cargo
