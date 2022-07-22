@@ -1,4 +1,4 @@
-from candidato import Candidato
+from structures.candidato import Candidato
 
 # classe para representar um cargo em disputa na eleicao
 class Cargo:

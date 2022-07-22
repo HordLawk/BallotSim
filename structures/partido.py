@@ -1,4 +1,4 @@
-from candidato import Candidato
+from structures.candidato import Candidato
 
 # classe para representar um partido politico que disputa a eleicao
 class Partido:

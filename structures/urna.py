@@ -1,8 +1,8 @@
 import csv
 
-from candidato import Candidato
-from cargo import Cargo
-from partido import Partido
+from structures.candidato import Candidato
+from structures.cargo import Cargo
+from structures.partido import Partido
 
 # classe para representar uma urna eletronica
 class UrnaEletronica:

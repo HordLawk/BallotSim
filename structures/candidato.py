@@ -1,10 +1,10 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 
-from voto import Voto
+from structures.voto import Voto
 if TYPE_CHECKING:
-    from partido import Partido
-    from cargo import Cargo
+    from structures.partido import Partido
+    from structures.cargo import Cargo
 
 # classe para representar um candidato em disputa na eleicao
 class Candidato:

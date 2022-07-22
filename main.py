@@ -1,7 +1,7 @@
 import PySimpleGUI as sg
 
-from urna import UrnaEletronica
-from layout import *
+from structures.urna import UrnaEletronica
+from utils.layout import *
 
 # exibe as informacoes do candidato selecionado na tela e 
 # as instrucoes para a confirmacao ou correcao do voto
