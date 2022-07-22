@@ -52,7 +52,7 @@ def layout_controle() -> sg.Window:
                         key='partidoInput',
                         size=40,
                         readonly=True,
-                        default_value='Todos',
+                        default_value='Todos'
                     ),
                     sg.Button(
                         'Gerar relatório',
@@ -68,6 +68,7 @@ def layout_controle() -> sg.Window:
                         key='cargoInput',
                         size=40,
                         readonly=True,
+                        default_value='Todos'
                     ),
                     sg.Button(
                         'Gerar relatório',

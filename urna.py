@@ -6,6 +6,10 @@ import numpy
 
 # classe para representar uma urna eletronica
 class UrnaEletronica:
+    # construtor da classe, inicializa lista de cargos, partidos, candidatos e CPFs que ja votaram
+    # lista de cargos deve ser um arquivo csv com a formatacao por linha: nome,tamanhoCodigo
+    # lista de partidos deve ser um arquivo csv com a formatacao por linha: nome,numero,sigla
+    # lista de candidatos deve ser um arquivo csv com a formatacao por linha: nome,numero,indiceCargo
     def __init__(self, partidos_csv: str, cargos_csv: str, candidatos_csv: str) -> None:
         self.cargos: list[Cargo] = []
         self.cpfs: set[str] = set()
@@ -41,6 +45,19 @@ class UrnaEletronica:
             except ValueError:
                 pass
 
+    # chama a funcao para adicionar um voto ao candidato de um cargo especifico com o numero selecionado
+    def inserir_voto(self, numero: str, cargo_codigo: int) -> None:
+        self.cargos[cargo_codigo].inserir_voto(numero)
+
+    # verifica se o CPF informado ja foi utilizado para votacao; retorna True ou False   
+    def novo_cpf(self, cpf: str) -> bool:
+        if cpf in self.cpfs:
+            return False
+        self.cpfs.add(cpf)
+        return True
+
+    # busca um partido na lista de partidos pelo seu numero associado
+    # retorna objeto da classe partido (se encontrar) ou None (se nao encontrar)
     def buscar_partido(self, numero: str) -> (Partido | None):
         for p in self.partidos:
             if p.numero == numero[:2]:
