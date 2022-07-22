@@ -135,7 +135,8 @@ while True:
 
         # janela de votacao
         # tecla CORRIGE apertada no teclado
-        case 'CORRIGE': 
+        case 'CORRIGE':
+            playsound('./resources/tecla.wav', block=False)
             numero = ''
             # insercao do CPF
             if i == -1:
@@ -154,6 +155,7 @@ while True:
 
         # tecla BRANCO apertada no teclado
         case 'BRANCO':
+            playsound('./resources/tecla.wav', block=False)
             # votacao
             if i >= 0 and i < len(urna.cargos):
                 urna.inserir_voto(None, i)
@@ -165,6 +167,7 @@ while True:
 
         # tecla CONFIRMA apertada no teclado
         case 'CONFIRMA':
+            playsound('./resources/tecla.wav', block=False)
             # insercao do CPF
             if i == -1:
                 if (j != 11) or not validar_cpf(numero):
@@ -191,6 +194,7 @@ while True:
         
         # digito apertado no teclado
         case '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '0':
+            playsound('./resources/tecla.wav', block=False)
             # insercao do CPF
             if i == -1:
                 if j >= 11:

@@ -1,4 +1,5 @@
 import PySimpleGUI as sg
+from playsound import playsound
 
 # define o layout da janela de controle da votação e da urna eletronica
 # retorna elemento do tipo PySimpleGUI.Window
@@ -171,6 +172,7 @@ def layout_votacao(i: int, cargos = None) -> sg.Window:
     # fim do processo de votacao
     else:
         layout_tela = [[sg.Text('FIM', font=('Arial', 30), justification='c')]]
+        playsound('./resources/fim.wav', block=False)
 
     layout = [[sg.Col(layout_tela, size=(400, 300)), sg.Col(layout_teclado, background_color='#404040')]]
     window = sg.Window('Urna Eletrônica', layout, finalize=True)
