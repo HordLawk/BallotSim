@@ -12,19 +12,9 @@ def layout_controle() -> sg.Window:
                 [sg.Push(), sg.Text('Controle da votação', font=('Arial', 14)), sg.Push()],
                 [
                     sg.FileBrowse(
-                        'Carregar partidos',
-                        key='fbPartido',
-                        file_types=([("CSV Files", "*.csv")]),
-                        target='csvPartido',
-                        size=20,
-                    ), 
-                    sg.Input('', key='csvPartido', disabled=True, enable_events=True)
-                ],
-                [
-                    sg.FileBrowse(
                         'Carregar cargos',
                         key='fbCargo',
-                        file_types=([("CSV Files", "*.csv")]),
+                        file_types=[("CSV Files", "*.csv")],
                         target='csvCargo',
                         size=20,
                     ), 
@@ -32,9 +22,19 @@ def layout_controle() -> sg.Window:
                 ],
                 [
                     sg.FileBrowse(
+                        'Carregar partidos',
+                        key='fbPartido',
+                        file_types=[("CSV Files", "*.csv")],
+                        target='csvPartido',
+                        size=20,
+                    ), 
+                    sg.Input('', key='csvPartido', disabled=True, enable_events=True)
+                ],
+                [
+                    sg.FileBrowse(
                         'Carregar candidatos',
                         key='fbCandidato',
-                        file_types=([("CSV Files", "*.csv")]),
+                        file_types=[("CSV Files", "*.csv")],
                         target='csvCandidato',
                         size=20,
                     ), 
