@@ -1,11 +1,12 @@
 import PySimpleGUI as sg
+
 from urna import UrnaEletronica
 from layout import *
-from time import sleep
 
 # exibe as informacoes do candidato selecionado na tela e 
 # as instrucoes para a confirmacao ou correcao do voto
-def exibir_info(candidato: Candidato) -> None:
+def exibir_info(numero: str, i: int) -> None:
+    candidato = urna.buscar_candidato(numero, i)
     if candidato == None:
         window['info'].update(visible=False)
 
@@ -145,7 +146,7 @@ while True:
                 for k in range(j):
                     window2[k].update('')
 
-                exibir_info(None)
+                exibir_info(None, i)
 
             j = 0
 
@@ -208,5 +209,4 @@ while True:
                 window2[j].update(event)
                 j += 1
                 if j == urna.cargos[i].tamCod:
-                    candidato = urna.buscar_candidato(numero, i)
-                    exibir_info(candidato)
+                    exibir_info(numero, i)

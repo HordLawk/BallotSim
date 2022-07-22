@@ -1,8 +1,9 @@
 import csv
+import numpy
+
 from candidato import Candidato
 from cargo import Cargo
 from partido import Partido
-import numpy
 
 # classe para representar uma urna eletronica
 class UrnaEletronica:
@@ -45,7 +46,7 @@ class UrnaEletronica:
         for p in self.partidos:
             if p.numero == numero[:2]:
                 return p
-                
+
         return None
     
     # busca um candidato na lista de candidatos de um cargo especifico pelo seu numero associado
