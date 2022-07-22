@@ -16,7 +16,7 @@ class Cargo:
 
     # adiciona um voto ao candidato com o numero selecionado (se existir),
     # ou incrementa o contador de votos invalidos
-    def inserir_voto(self, numero: int) -> None:
+    def inserir_voto(self, numero: (str | None)) -> None:
         candidato = self.buscar_candidato(numero)
         if candidato:
             return candidato.inserir_voto()
@@ -25,7 +25,7 @@ class Cargo:
 
     # busca um candidato na lista de candidatos pelo seu numero associado
     # retorna objeto da classe candidato (se encontrar) ou None (se nao encontrar)
-    def buscar_candidato(self, numero: str) -> (Candidato | None):
+    def buscar_candidato(self, numero: (str | None)) -> (Candidato | None):
         for c in self.candidatos:
             if c.numero == numero:
                 return c

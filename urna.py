@@ -47,7 +47,7 @@ class UrnaEletronica:
                 pass
 
     # chama a funcao para adicionar um voto ao candidato de um cargo especifico com o numero selecionado
-    def inserir_voto(self, numero: str, cargo_codigo: int) -> None:
+    def inserir_voto(self, numero: (str | None), cargo_codigo: int) -> None:
         self.cargos[cargo_codigo].inserir_voto(numero)
 
     # verifica se o CPF informado ja foi utilizado para votacao; retorna True ou False   

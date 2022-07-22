@@ -34,6 +34,8 @@ sg.set_options(font=("Arial", 12))
 # configuracoes iniciais da urna eletronica
 numero = ''
 urna = None
+# `i` representa o indice da janela da simulacao da urna que o usuario se encontra no momento
+# `j` representa a quantidade de digitos entrados no input da simulacao da urna ate o momento
 i, j = 0, 0
 inicio = False
 partidos_csv, cargos_csv, candidatos_csv = '', '', ''
@@ -154,6 +156,7 @@ while True:
         case 'BRANCO':
             # votacao
             if i >= 0 and i < len(urna.cargos):
+                urna.inserir_voto(None, i)
                 window2.close()
                 numero = ''
                 i += 1
