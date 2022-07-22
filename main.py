@@ -84,8 +84,8 @@ while True:
             window1['relat1'].update(disabled=False)
             window1['relat2'].update(disabled=False)
             window1['relat3'].update(disabled=False)
-            window1['cargoInput'].update(values=urna.cargos)
-            window1['partidoInput'].update(values=urna.partidos)
+            window1['cargoInput'].update(values=['Todos', *urna.cargos], value='Todos')
+            window1['partidoInput'].update(values=['Todos', *urna.partidos], value='Todos')
         
         # exibir o relatorio de todos os votos da urna
         case 'relat1':
@@ -96,18 +96,18 @@ while True:
         case 'relat2':
             window3 = layout_relatorio()
             window3['relat'].update(
-                values['partidoInput']
-                and values['partidoInput'].relatorio()
-                or urna.relatorio_partidos()
+                values['partidoInput'] == 'Todos'
+                and urna.relatorio_partidos()
+                or values['partidoInput'].relatorio()
             )
 
         # exibir o relatorio dos votos por cargo
         case 'relat3':
             window3 = layout_relatorio()
             window3['relat'].update(
-                values['cargoInput']
-                and values['cargoInput'].relatorio()
-                or urna.relatorio_cargos()
+                values['cargoInput'] == 'Todos'
+                and urna.relatorio_cargos()
+                or values['cargoInput'].relatorio()
             )
 
         # arquivo com lista de partidos carregado

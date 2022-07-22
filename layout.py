@@ -24,7 +24,7 @@ def layout_controle() -> sg.Window:
                 [sg.Push(), sg.Text('Apuração dos votos', font=('Arial', 14)), sg.Push()],
                 [sg.Button('Gerar relatório', key='relat1', size=20, disabled=True)],
                 [sg.Text('Selecionar partido')],
-                [sg.Combo(values=[], key='partidoInput', size=40, readonly=True), sg.Button('Gerar relatório', key='relat2', size=20, disabled=True)],
+                [sg.Combo(values=[], key='partidoInput', size=40, readonly=True, default_value='Todos'), sg.Button('Gerar relatório', key='relat2', size=20, disabled=True)],
                 [sg.Text('Selecionar cargo')],
                 [sg.Combo(values=[], key='cargoInput', size=40, readonly=True), sg.Button('Gerar relatório', key='relat3', size=20, disabled=True)]
             ],
