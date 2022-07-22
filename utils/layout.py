@@ -178,3 +178,12 @@ def layout_votacao(i: int, cargos = None) -> sg.Window:
     window = sg.Window('Urna Eletrônica', layout, finalize=True)
 
     return window
+
+def layout_erro() -> sg.Window:
+    return sg.Window(
+        'Erro',
+        [[
+            sg.Text(
+                'Erro na inicialização do simulador\n\n'
+                'Verifique se o arquivo CSV de cargos está formatado corretamente'    
+            )]], size=(500, 80), finalize=True)

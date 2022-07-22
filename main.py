@@ -41,8 +41,8 @@ inicio = False
 partidos_csv, cargos_csv, candidatos_csv = '', '', ''
 
 # janelas da aplicacao
-# window1: controle; window2: votacao; window3: relatorio dos votos
-window1, window2, window3 = layout_controle(), None, None
+# window_controle: controle; window_votacao: votacao; window_relatorio: relatorio dos votos
+window_controle, window_votacao, window_relatorio = layout_controle(), None, None
 
 # loop principal da aplicacao
 while True:
@@ -53,54 +53,58 @@ while True:
         case sg.WIN_CLOSED:
             window.close()
             # janela de controle
-            if window == window1:
+            if window == window_controle:
                 break
             
             # janela de votacao
-            elif window == window2:
-                window1['inicio'].update(disabled=False)
-                window1['fim'].update(disabled=False)
-                window2 = None
+            elif window == window_votacao:
+                window_controle['inicio'].update(disabled=False)
+                window_controle['fim'].update(disabled=False)
+                window_votacao = None
             
             # janela de relatorio dos votos
-            elif window == window3:
-                window3 = None
+            elif window == window_relatorio:
+                window_relatorio = None
         
         # janela de controle da votacao/urna eletronica
         # iniciar o processo de votacao
         case 'inicio':
             if not inicio:
-                inicio = True
-                urna = UrnaEletronica(partidos_csv, cargos_csv, candidatos_csv)
+                try:
+                    urna = UrnaEletronica(partidos_csv, cargos_csv, candidatos_csv)
+                    inicio = True
+                except Exception:
+                    layout_erro()
+                    continue
 
-            window1['inicio'].update(disabled=True)
-            window1['fim'].update(disabled=True)
+            window_controle['inicio'].update(disabled=True)
+            window_controle['fim'].update(disabled=True)
             i = -1
             j = 0
-            window2 = layout_votacao(i)
+            window_votacao = layout_votacao(i)
         
         # finalizar o processo de votacao
         case 'fim':
-            window1['fbPartido'].update(disabled=True)
-            window1['fbCandidato'].update(disabled=True)
-            window1['fbCargo'].update(disabled=True)
-            window1['inicio'].update(disabled=True)
-            window1['fim'].update(disabled=True)
-            window1['relat1'].update(disabled=False)
-            window1['relat2'].update(disabled=False)
-            window1['relat3'].update(disabled=False)
-            window1['cargoInput'].update(values=['Todos', *urna.cargos], value='Todos')
-            window1['partidoInput'].update(values=['Todos', *urna.partidos], value='Todos')
+            window_controle['fbPartido'].update(disabled=True)
+            window_controle['fbCandidato'].update(disabled=True)
+            window_controle['fbCargo'].update(disabled=True)
+            window_controle['inicio'].update(disabled=True)
+            window_controle['fim'].update(disabled=True)
+            window_controle['relat1'].update(disabled=False)
+            window_controle['relat2'].update(disabled=False)
+            window_controle['relat3'].update(disabled=False)
+            window_controle['cargoInput'].update(values=['Todos', *urna.cargos], value='Todos')
+            window_controle['partidoInput'].update(values=['Todos', *urna.partidos], value='Todos')
         
         # exibir o relatorio de todos os votos da urna
         case 'relat1':
-            window3 = layout_relatorio()
-            window3['relat'].update(urna.relatorio_votos())
+            window_relatorio = layout_relatorio()
+            window_relatorio['relat'].update(urna.relatorio_votos())
 
         # exibir o relatorio dos votos por partido
         case 'relat2':
-            window3 = layout_relatorio()
-            window3['relat'].update(
+            window_relatorio = layout_relatorio()
+            window_relatorio['relat'].update(
                 values['partidoInput'] == 'Todos'
                 and urna.relatorio_partidos()
                 or values['partidoInput'].relatorio()
@@ -108,8 +112,8 @@ while True:
 
         # exibir o relatorio dos votos por cargo
         case 'relat3':
-            window3 = layout_relatorio()
-            window3['relat'].update(
+            window_relatorio = layout_relatorio()
+            window_relatorio['relat'].update(
                 values['cargoInput'] == 'Todos'
                 and urna.relatorio_cargos()
                 or values['cargoInput'].relatorio()
@@ -119,19 +123,19 @@ while True:
         case 'csvPartido':
             partidos_csv = values['csvPartido']
             if partidos_csv and candidatos_csv and cargos_csv:
-                window1['inicio'].update(disabled=False)
+                window_controle['inicio'].update(disabled=False)
                 
         # arquivo com lista de candidatos carregado
         case 'csvCargo':
             cargos_csv = values['csvCargo']
             if partidos_csv and candidatos_csv and cargos_csv:
-                window1['inicio'].update(disabled=False)
+                window_controle['inicio'].update(disabled=False)
                 
         # arquivo com lista de candidatos carregado
         case 'csvCandidato':
             candidatos_csv = values['csvCandidato']
             if partidos_csv and candidatos_csv and cargos_csv:
-                window1['inicio'].update(disabled=False)
+                window_controle['inicio'].update(disabled=False)
 
         # janela de votacao
         # tecla CORRIGE apertada no teclado
@@ -140,14 +144,14 @@ while True:
             numero = ''
             # insercao do CPF
             if i == -1:
-                window2['erroCPF'].update(visible=False)
+                window_votacao['erroCPF'].update(visible=False)
                 for k in range(j):
-                    window2['CPF' + str(k)].update('')
+                    window_votacao['CPF' + str(k)].update('')
 
             # votacao
             elif i < len(urna.cargos):
                 for k in range(j):
-                    window2[k].update('')
+                    window_votacao[k].update('')
 
                 exibir_info(None, i)
 
@@ -159,11 +163,11 @@ while True:
             # votacao
             if i >= 0 and i < len(urna.cargos):
                 urna.inserir_voto(None, i)
-                window2.close()
+                window_votacao.close()
                 numero = ''
                 i += 1
                 j = 0
-                window2 = layout_votacao(i, urna.cargos)
+                window_votacao = layout_votacao(i, urna.cargos)
 
         # tecla CONFIRMA apertada no teclado
         case 'CONFIRMA':
@@ -174,23 +178,23 @@ while True:
                     continue
 
                 if not urna.novo_cpf(numero):
-                    window2['erroCPF'].update('CPF ja utilizado', visible=True)
+                    window_votacao['erroCPF'].update('CPF ja utilizado', visible=True)
                     continue
 
                 i += 1
                 j = 0
-                window2.close()
+                window_votacao.close()
                 numero = ''
-                window2 = layout_votacao(i, urna.cargos)
+                window_votacao = layout_votacao(i, urna.cargos)
 
             # votacao
             elif (i < len(urna.cargos)) and (j == urna.cargos[i].tamCod):
                 urna.inserir_voto(numero, i)
                 i += 1
                 j = 0
-                window2.close()
+                window_votacao.close()
                 numero = ''
-                window2 = layout_votacao(i, urna.cargos)
+                window_votacao = layout_votacao(i, urna.cargos)
         
         # digito apertado no teclado
         case '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '0':
@@ -201,11 +205,11 @@ while True:
                     continue
 
                 numero += event
-                window2['CPF' + str(j)].update(event)
+                window_votacao['CPF' + str(j)].update(event)
                 j += 1
                 if j == 11:
                     if not validar_cpf(numero):
-                        window2['erroCPF'].update('CPF inválido', visible=True)
+                        window_votacao['erroCPF'].update('CPF inválido', visible=True)
 
             # votacao
             elif i < len(urna.cargos):
@@ -213,7 +217,7 @@ while True:
                     continue
                 
                 numero += event
-                window2[j].update(event)
+                window_votacao[j].update(event)
                 j += 1
                 if j == urna.cargos[i].tamCod:
                     exibir_info(numero, i)
