@@ -8,4 +8,4 @@ class Voto:
 
     # retorna representacao do voto em string
     def __str__(self) -> str:
-        return f'{self.data}'
+        return f'{self.data.strftime("%m/%d/%Y, %H:%M")}'
