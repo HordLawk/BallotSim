@@ -1,9 +1,4 @@
-from __future__ import annotations
-from typing import TYPE_CHECKING
-
 from candidato import Candidato
-if TYPE_CHECKING:
-    from partido import Partido
 
 # classe para representar um cargo em disputa na eleicao
 class Cargo:
@@ -34,7 +29,7 @@ class Cargo:
         for c in self.candidatos:
             if c.numero == numero:
                 return c
-                
+
         return None
     
     # retorna string com relatorio dos votos relativos aos candidatos disputando o cargo

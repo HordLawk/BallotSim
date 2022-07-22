@@ -1,9 +1,4 @@
-from __future__ import annotations
-from typing import TYPE_CHECKING
-
 from candidato import Candidato
-if TYPE_CHECKING:
-    from cargo import Cargo
 
 # classe para representar um partido politico que disputa a eleicao
 class Partido:

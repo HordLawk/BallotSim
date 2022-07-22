@@ -1,6 +1,4 @@
 import PySimpleGUI as sg
-from cargo import Cargo
-from candidato import Candidato
 
 # define o layout da janela de controle da votação e da urna eletronica
 # retorna elemento do tipo PySimpleGUI.Window
@@ -169,7 +167,7 @@ def layout_votacao(i: int, cargos = None) -> sg.Window:
                 [sg.Text('LARANJA para CORRIGIR')],
             ], key='info', visible=False, border_width=0, pad=0)]
         ]
-        
+
     # fim do processo de votacao
     else:
         layout_tela = [[sg.Text('FIM', font=('Arial', 30), justification='c')]]
