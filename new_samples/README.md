@@ -1,5 +1,5 @@
 ## Nota
-Os candidatos listados estão relacionados às eleições gerais ocorridas no Brasil
+Os candidatos listados concorriam, em suas respectivas esferas, nas eleições gerais ocorridas no Brasil
 no ano de 2018.
 
 ## Referências
