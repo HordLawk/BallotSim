@@ -11,11 +11,23 @@ def layout_controle() -> sg.Window:
             [
                 [sg.Push(), sg.Text('Controle da votação', font=('Arial', 14)), sg.Push()],
                 [
-                    sg.FileBrowse('Carregar partidos', key='fbPartido', file_types=(("CSV Files", "*.csv"),), target='csvPartido', size=20), 
+                    sg.FileBrowse(
+                        'Carregar partidos',
+                        key='fbPartido',
+                        file_types=(("CSV Files", "*.csv")),
+                        target='csvPartido',
+                        size=20,
+                    ), 
                     sg.Input('', key='csvPartido', disabled=True, enable_events=True)
                 ],
                 [
-                    sg.FileBrowse('Carregar candidatos', key='fbCandidato', file_types=(("CSV Files", "*.csv"),), target='csvCandidato', size=20), 
+                    sg.FileBrowse(
+                        'Carregar candidatos',
+                        key='fbCandidato',
+                        file_types=(("CSV Files", "*.csv")),
+                        target='csvCandidato',
+                        size=20,
+                    ), 
                     sg.Input('', key='csvCandidato', disabled=True, enable_events=True)
                 ],
                 [sg.Button('Iniciar voto', key='inicio', size=20, disabled=True)],
@@ -24,13 +36,40 @@ def layout_controle() -> sg.Window:
                 [sg.Push(), sg.Text('Apuração dos votos', font=('Arial', 14)), sg.Push()],
                 [sg.Button('Gerar relatório', key='relat1', size=20, disabled=True)],
                 [sg.Text('Selecionar partido')],
-                [sg.Combo(values=[], key='partidoInput', size=40, readonly=True, default_value='Todos'), sg.Button('Gerar relatório', key='relat2', size=20, disabled=True)],
+                [
+                    sg.Combo(
+                        values=[],
+                        key='partidoInput',
+                        size=40,
+                        readonly=True,
+                        default_value='Todos',
+                    ),
+                    sg.Button(
+                        'Gerar relatório',
+                        key='relat2',
+                        size=20,
+                        disabled=True,
+                    ),
+                ],
                 [sg.Text('Selecionar cargo')],
-                [sg.Combo(values=[], key='cargoInput', size=40, readonly=True), sg.Button('Gerar relatório', key='relat3', size=20, disabled=True)]
+                [
+                    sg.Combo(
+                        values=[],
+                        key='cargoInput',
+                        size=40,
+                        readonly=True,
+                    ),
+                    sg.Button(
+                        'Gerar relatório',
+                        key='relat3',
+                        size=20,
+                        disabled=True,
+                    ),
+                ],
             ],
             pad=20,
             border_width=0,
-        )
+        ),
     ]]
     window = sg.Window('Controle da Urna Eletrônica', layout, finalize=True)
 
