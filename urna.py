@@ -6,12 +6,9 @@ import numpy
 
 class UrnaEletronica:
     def __init__(self, partidos_csv: str, cargos_csv: str, candidatos_csv: str) -> None:
-        self.partidos: list[Partido] = []
         self.cargos: list[Cargo] = []
         self.cpfs: set[str] = set()
-        for linha in csv.reader(open(partidos_csv)):
-            if len(linha) > 2:
-                self.partidos.append(Partido(*linha[:3]))
+        self.partidos = [Partido(*linha[:3]) for linha in csv.reader(open(partidos_csv)) if len(linha) > 2]
         for linha in csv.reader(open(cargos_csv)):
             if len(linha) < 2:
                 continue
