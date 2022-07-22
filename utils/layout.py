@@ -186,4 +186,8 @@ def layout_erro() -> sg.Window:
             sg.Text(
                 'Erro na inicialização do simulador\n\n'
                 'Verifique se o arquivo CSV de cargos está formatado corretamente'    
-            )]], size=(500, 80), finalize=True)
+            ),
+        ]],
+        size=(500, 80),
+        finalize=True,
+    )
