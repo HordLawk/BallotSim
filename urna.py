@@ -19,34 +19,22 @@ class UrnaEletronica:
             try:
                 self.cargos.append(Cargo(linha[0], int(linha[1])))
             except ValueError:
-                continue
+                pass
         for linha in csv.reader(open(candidatos_csv)):
             if len(linha) < 3:
                 continue
             partido = self.buscar_partido(linha[1])
             if not partido:
                 continue
-            cargo_codigo = int(linha[2])
-            if cargo_codigo > len(self.cargos):
-                continue
-            cargo = self.cargos[cargo_codigo]
-            candidato = Candidato(*linha[:2], partido, cargo)
-            partido.inserir_candidato(candidato)
-            cargo.inserir_candidato(candidato)
- 
-    # chama a funcao para adicionar um voto ao candidato de um cargo especifico com o numero selecionado
-    def inserir_voto(self, numero: str, cargo_codigo: int) -> None:
-        self.cargos[cargo_codigo].inserir_voto(numero)
-
-    # verifica se o CPF informado ja foi utilizado para votacao; retorna True ou False   
-    def novo_cpf(self, cpf: str) -> bool:
-        if cpf in self.cpfs:
-            return False
-        self.cpfs.add(cpf)
-        return True
-    
-    # busca um partido na lista de partidos pelo seu numero associado
-    # retorna objeto da classe partido (se encontrar) ou None (se nao encontrar)
+                cargo_codigo = int(linha[2])
+                if cargo_codigo > len(self.cargos):
+                    continue
+                cargo = self.cargos[cargo_codigo]
+                candidato = Candidato(*linha[:2], partido, cargo)
+                partido.inserir_candidato(candidato)
+                cargo.inserir_candidato(candidato)
+            except ValueError:
+                pass
     def buscar_partido(self, numero: str) -> (Partido | None):
         for p in self.partidos:
             if p.numero == numero[:2]:
