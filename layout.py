@@ -12,6 +12,16 @@ def layout_controle() -> sg.Window:
                 [sg.Push(), sg.Text('Controle da votação', font=('Arial', 14)), sg.Push()],
                 [
                     sg.FileBrowse(
+                        'Carregar cargos',
+                        key='fbCargo',
+                        file_types=[("CSV Files", "*.csv")],
+                        target='csvCargo',
+                        size=20,
+                    ), 
+                    sg.Input('', key='csvCargo', disabled=True, enable_events=True)
+                ],
+                [
+                    sg.FileBrowse(
                         'Carregar partidos',
                         key='fbPartido',
                         file_types=[("CSV Files", "*.csv")],
