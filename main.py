@@ -8,6 +8,7 @@ from time import sleep
 def exibir_info(candidato: Candidato) -> None:
     if candidato == None:
         window['info'].update(visible=False)
+
     else:
         window['info'].update(visible=True)
         window['nome'].update(str(candidato.nome))
@@ -17,6 +18,7 @@ def exibir_info(candidato: Candidato) -> None:
 def validar_cpf(cpf: str) -> bool:
     if (len(cpf) < 11) or (cpf == (cpf[0] * 11)):
         return False
+        
     digitos = [int(e) for e in cpf]
     return (
         ((((sum([(e * (10 - i)) for i,e in enumerate(digitos[:9])]) * 10) % 11) % 10) == digitos[9])

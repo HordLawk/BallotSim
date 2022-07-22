@@ -25,6 +25,7 @@ class Cargo:
         candidato = self.buscar_candidato(numero)
         if candidato:
             return candidato.inserir_voto()
+
         self.votosInvalidos += 1
 
     # busca um candidato na lista de candidatos pelo seu numero associado
@@ -33,6 +34,7 @@ class Cargo:
         for c in self.candidatos:
             if c.numero == numero:
                 return c
+                
         return None
     
     # retorna string com relatorio dos votos relativos aos candidatos disputando o cargo

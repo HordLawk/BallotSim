@@ -148,6 +148,7 @@ def layout_votacao(i: int, cargos = None) -> sg.Window:
             ]) for j in range(11)],
             [sg.Text('', key='erroCPF', visible=False)]
         ]
+
     # votacao
     elif i < len(cargos):
         layout_tela = [
@@ -167,6 +168,7 @@ def layout_votacao(i: int, cargos = None) -> sg.Window:
                 [sg.Text('LARANJA para CORRIGIR')],
             ], key='info', visible=False, border_width=0, pad=0)]
         ]
+        
     # fim do processo de votacao
     else:
         layout_tela = [[sg.Text('FIM', font=('Arial', 30), justification='c')]]
