@@ -18,20 +18,23 @@ class UrnaEletronica:
             try:
                 self.cargos.append(Cargo(linha[0], int(linha[1])))
             except ValueError:
-                continue
+                pass
         for linha in csv.reader(open(candidatos_csv)):
             if len(linha) < 3:
                 continue
             partido = self.buscar_partido(linha[1])
             if not partido:
                 continue
-            cargo_codigo = int(linha[2])
-            if cargo_codigo > len(self.cargos):
-                continue
-            cargo = self.cargos[cargo_codigo]
-            candidato = Candidato(*linha[:2], partido, cargo)
-            partido.inserir_candidato(candidato)
-            cargo.inserir_candidato(candidato)
+            try:
+                cargo_codigo = int(linha[2])
+                if cargo_codigo > len(self.cargos):
+                    continue
+                cargo = self.cargos[cargo_codigo]
+                candidato = Candidato(*linha[:2], partido, cargo)
+                partido.inserir_candidato(candidato)
+                cargo.inserir_candidato(candidato)
+            except ValueError:
+                pass
 
     def inserir_voto(self, numero: str, cargo_codigo: int) -> None:
         self.cargos[cargo_codigo].inserir_voto(numero)
